@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>QUANTRO Games — Coming Soon</title>
+
+  <!-- Bootstrap + AOS (same as other pages) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#0B0E1A;
+      --nav:#102033;
+      --accent:#1FB2F3;
+      --accent2:#3F6DFF;
+      --muted:#9aa8c3;
+    }
+
+    body{
+      margin:0;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: radial-gradient(circle at top center, var(--nav) 0%, var(--bg) 70%);
+      color:#eef6ff;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+
+    /* header area (keeps same look as main site) */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 1200;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:12px 18px;
+      background: linear-gradient(180deg, rgba(11,14,26,0.9), rgba(11,14,26,0.7));
+      border-bottom:1px solid rgba(255,255,255,0.03);
+      backdrop-filter: blur(6px);
+    }
+    .brand { display:flex; align-items:center; gap:12px; }
+    .brand .logo {
+      width:44px; height:44px; border-radius:8px;
+      display:flex; align-items:center; justify-content:center;
+      background: linear-gradient(135deg,var(--accent),var(--accent2));
+      box-shadow: 0 8px 30px rgba(31,178,243,0.12);
+      color:#001; font-weight:800;
+    }
+    .brand-text { font-weight:700; letter-spacing:0.6px; }
+
+    .nav-actions { display:flex; gap:10px; align-items:center; }
+    .nav-btn {
+      border-radius:10px;
+      padding:8px 12px;
+      border:1px solid rgba(31,178,243,0.12);
+      color:var(--accent);
+      background:transparent;
+      text-decoration:none;
+      font-weight:700;
+    }
+
+    /* hero */
+    .hero {
+      height:36vh;
+      min-height:260px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      flex-direction:column;
+      gap:12px;
+      padding:18px;
+    }
+    .hero h1 { font-family: "Orbitron", sans-serif; font-size:34px; margin:0; text-shadow:0 0 20px var(--accent); }
+    .hero p { margin:0; color:var(--muted); }
+
+    /* grid of games */
+    .content {
+      max-width:1200px;
+      margin:26px auto 80px;
+      padding:0 18px;
+    }
+    .grid { display:grid; grid-template-columns: repeat(3, 1fr); gap:18px; }
+    @media (max-width:1000px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width:640px) { .grid { grid-template-columns: 1fr; } }
+
+    .card {
+      border-radius:14px;
+      overflow:hidden;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border:1px solid rgba(31,178,243,0.06);
+      padding:12px;
+      box-shadow: 0 12px 30px rgba(11,14,26,0.6);
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+    .card:hover { transform:translateY(-8px); box-shadow:0 30px 60px rgba(8,12,20,0.7); }
+
+    .thumb {
+      height:220px; border-radius:10px; overflow:hidden;
+      display:flex; align-items:center; justify-content:center;
+      background: linear-gradient(135deg, rgba(31,178,243,0.08), rgba(63,109,255,0.06));
+      border:1px solid rgba(31,178,243,0.04);
+    }
+    .thumb img { width:100%; height:100%; object-fit:cover; display:block; }
+
+    .card-body { padding:10px 6px; display:flex; flex-direction:column; gap:8px; }
+    .card-title { font-weight:800; color:#e9fbff; }
+    .card-sub { color:var(--muted); font-size:13px; }
+    .card-actions { display:flex; gap:8px; margin-top:6px; align-items:center; }
+    .btn-play {
+      background: linear-gradient(90deg,var(--accent),var(--accent2));
+      border:0; color:#001; padding:8px 12px; border-radius:10px; font-weight:800;
+      cursor:not-allowed; /* disabled until released */
+    }
+    .btn-info {
+      background:transparent; border-radius:10px; padding:8px 10px;
+      border:1px solid rgba(255,255,255,0.04); color:var(--muted);
+    }
+    .tag-soon {
+      background: rgba(255,255,255,0.02); color:#ffd5c6; padding:6px 8px; border-radius:999px; font-weight:700; font-size:12px;
+    }
+
+    /* page footer same style */
+    footer {
+      padding:28px 18px;
+      background: linear-gradient(90deg,#102033,#0B0E1A);
+      text-align:center; color:#9fb4d6;
+    }
+
+    /* small helpers */
+    .muted { color:var(--muted); }
+    .center { text-align:center; }
+
+    /* coming-soon hero badge */
+    .big-pulse {
+      display:inline-block; padding:8px 14px; border-radius:999px;
+      background:linear-gradient(90deg,var(--accent),var(--accent2)); color:#001; font-weight:800;
+      box-shadow:0 12px 50px rgba(31,178,243,0.12);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- header -->
+  <header class="header">
+    <div class="brand">
+      <div class="logo"><img src="assets/logo.png" alt="Q" style="width:36px; height:36px; display:block; object-fit:contain;"></div>
+      <div class="brand-text">QUANTRO Games</div>
+    </div>
+
+    <div style="display:flex; gap:8px; align-items:center;">
+      <a class="nav-btn" href="quantro.html">Main</a>
+
+      <!-- Usecase dropdown (keeps same behavior as main site) -->
+      <div style="position:relative;">
+        <a class="nav-btn" href="#" onclick="return false;" id="usecaseHeaderBtn">USECASE ▾</a>
+        <div id="usecaseHeaderMenu" style="position:absolute; top:44px; right:0; display:none; background:rgba(16,32,51,0.94); border:1px solid rgba(31,178,243,0.12); padding:6px 0; border-radius:8px; min-width:180px;">
+          <a href="quantro.html" style="display:block; padding:10px 14px; color:#fff; text-decoration:none; font-weight:700;">QUANTRO HOME</a>
+          <a href="quantroshop.html" style="display:block; padding:10px 14px; color:#fff; text-decoration:none; font-weight:700;">QUANTRO SHOP</a>
+        </div>
+      </div>
+
+      <a class="nav-btn" href="#" onclick="alert('Sign in coming soon')">Sign in</a>
+    </div>
+  </header>
+
+  <!-- hero -->
+  <section class="hero">
+    <img src="assets/logo.png" style="width:120px; filter:drop-shadow(0 0 18px #1FB2F3);" alt="QUANTRO">
+    <h1>QUANTRO Games — Play the Future</h1>
+    <p class="muted">Play-to-earn experiences powered by the QUANTRO Pulse Engine — launching soon.</p>
+    <div style="margin-top:10px;"><span class="big-pulse">Games Coming Soon</span></div>
+  </section>
+
+  <!-- content -->
+  <main class="content">
+    <div class="d-flex justify-content-between align-items-end mb-3">
+      <h2 style="margin:0">Featured Games</h2>
+      <div class="muted" style="font-size:13px">Demo catalog — gameplay disabled</div>
+    </div>
+
+    <div class="grid">
+      <!-- Game 1: Quantum Quest -->
+      <div class="card" data-aos="fade-up">
+        <div class="thumb">
+          <img src="assets/QuantumQuest.png" alt="Quantum Quest">
+        </div>
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <div class="card-title">Quantum Quest</div>
+              <div class="card-sub">Story-driven RPG with dynamic token rewards.</div>
+            </div>
+            <div class="tag-soon">COMING SOON</div>
+          </div>
+
+          <div class="card-actions">
+            <button class="btn-play" disabled>Play (coming)</button>
+            <button class="btn-info" onclick="alert('Quantum Quest details coming soon')">Details</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Game 2: Astro Defense -->
+      <div class="card" data-aos="fade-up" data-aos-delay="80">
+        <div class="thumb">
+          <img src="assets/astrodefence.png" alt="Astro Defense">
+        </div>
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <div class="card-title">Astro Defense</div>
+              <div class="card-sub">Tower & fleet defense across neon starfields.</div>
+            </div>
+            <div class="tag-soon">COMING SOON</div>
+          </div>
+
+          <div class="card-actions">
+            <button class="btn-play" disabled>Play (coming)</button>
+            <button class="btn-info" onclick="alert('Astro Defense details coming soon')">Details</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Game 3: Futuristic Racer -->
+      <div class="card" data-aos="fade-up" data-aos-delay="160">
+        <div class="thumb">
+          <img src="assets/FuturisticRacer.png" alt="Futuristic Racer">
+        </div>
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <div class="card-title">Futuristic Racer</div>
+              <div class="card-sub">High-speed neon circuits & competitive drifting.</div>
+            </div>
+            <div class="tag-soon">COMING SOON</div>
+          </div>
+
+          <div class="card-actions">
+            <button class="btn-play" disabled>Play (coming)</button>
+            <button class="btn-info" onclick="alert('Futuristic Racer details coming soon')">Details</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Game 4: Neon Sorcery -->
+      <div class="card" data-aos="fade-up">
+        <div class="thumb">
+          <img src="assets/neonsercery.png" alt="Neon Sorcery">
+        </div>
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <div class="card-title">Neon Sorcery</div>
+              <div class="card-sub">Arcane neon spells and puzzle-based combat.</div>
+            </div>
+            <div class="tag-soon">COMING SOON</div>
+          </div>
+
+          <div class="card-actions">
+            <button class="btn-play" disabled>Play (coming)</button>
+            <button class="btn-info" onclick="alert('Neon Sorcery details coming soon')">Details</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Game 5 (placeholder): More Games Coming -->
+      <div class="card" data-aos="fade-up" data-aos-delay="80">
+        <div class="thumb">
+          <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:var(--muted); font-weight:700;">
+            More Games<br>Coming
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <div class="card-title">Lab of Tomorrow</div>
+              <div class="card-sub">Experimental AI-driven minigames.</div>
+            </div>
+            <div class="tag-soon">COMING SOON</div>
+          </div>
+
+          <div class="card-actions">
+            <button class="btn-play" disabled>Play (coming)</button>
+            <button class="btn-info" onclick="alert('Lab of Tomorrow details coming soon')">Details</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Game 6 (placeholder): More Games Coming -->
+      <div class="card" data-aos="fade-up" data-aos-delay="160">
+        <div class="thumb">
+          <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:var(--muted); font-weight:700;">
+            More Games<br>Coming
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <div class="card-title">Cosmic Defender</div>
+              <div class="card-sub">Defend the core using QUANTRO pulses.</div>
+            </div>
+            <div class="tag-soon">COMING SOON</div>
+          </div>
+
+          <div class="card-actions">
+            <button class="btn-play" disabled>Play (coming)</button>
+            <button class="btn-info" onclick="alert('Cosmic Defender details coming soon')">Details</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- footer -->
+  <footer>
+    <div style="max-width:900px; margin:auto;">
+      <div style="font-weight:800; font-size:18px">QUANTRO Games — Demo</div>
+      <div class="muted" style="margin-top:8px">Wallet integration and QUANTRO payments will be enabled when games launch.</div>
+      <div style="margin-top:12px; color:var(--muted)">© QUANTRO • All rights reserved</div>
+    </div>
+  </footer>
+
+  <!-- scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <script>
+    AOS.init();
+
+    // header usecase menu behavior
+    const usecaseHeaderBtn = document.getElementById('usecaseHeaderBtn');
+    const usecaseHeaderMenu = document.getElementById('usecaseHeaderMenu');
+
+    usecaseHeaderBtn.addEventListener('click', function(e){
+      e.preventDefault();
+      usecaseHeaderMenu.style.display = usecaseHeaderMenu.style.display === 'block' ? 'none' : 'block';
+    });
+
+    document.addEventListener('click', function(evt){
+      if (!usecaseHeaderBtn.contains(evt.target) && (!usecaseHeaderMenu || !usecaseHeaderMenu.contains(evt.target))) {
+        if (usecaseHeaderMenu) usecaseHeaderMenu.style.display = 'none';
+      }
+    });
+
+    // quick "play" disable message
+    document.querySelectorAll('.btn-play').forEach(btn => {
+      btn.addEventListener('click', function(){
+        alert('Game launching soon — follow QUANTRO for updates!');
+      });
+    });
+  </script>
+</body>
+</html>

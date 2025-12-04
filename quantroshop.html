@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>QUANTRO Shop — Coming Soon</title>
+
+  <!-- External CSS / fonts -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#0B0E1A;
+      --nav:#0F1724;
+      --accent:#1FB2F3;
+      --accent2:#3F6DFF;
+      --muted:#9aa8c3;
+      --card-gradient: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    }
+
+    /* Reset / base */
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+      background: linear-gradient(180deg, #05060a 0%, var(--bg) 100%);
+      color:#e9f6ff;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+
+    /* Header */
+    .site-header{
+      position:sticky; top:0; z-index:1030;
+      background: rgba(5,6,10,0.88);
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+      display:flex; gap:12px; align-items:center; padding:12px 20px;
+      backdrop-filter: blur(6px);
+    }
+    .brand { display:flex; align-items:center; gap:12px; }
+    .brand .logo {
+      width:56px; height:56px; border-radius:10px;
+      display:flex; align-items:center; justify-content:center;
+      background: linear-gradient(135deg,var(--accent),var(--accent2));
+      box-shadow: 0 10px 40px rgba(31,178,243,0.12);
+      overflow:hidden;
+    }
+    .brand img { width:100%; height:100%; object-fit:contain; display:block; }
+    .brand-title { font-family: 'Orbitron', sans-serif; font-weight:700; letter-spacing:0.6px; font-size:18px; color:#eaf9ff; }
+
+    .search-bar { flex:1; margin:0 18px; }
+    .search-bar input{
+      width:100%; border-radius:10px; border:0; padding:12px 14px;
+      background: rgba(255,255,255,0.02); color: #dff7ff;
+    }
+
+    .nav-actions { display:flex; gap:10px; align-items:center; }
+    .neon-btn {
+      background: transparent; color:var(--accent); border:1px solid rgba(31,178,243,0.12);
+      padding:8px 12px; border-radius:10px; text-decoration:none;
+    }
+
+    /* Flash banner */
+    .flash {
+      max-width:1200px; margin:16px auto; border-radius:12px; padding:12px 16px;
+      background: linear-gradient(90deg, rgba(31,178,243,0.05), rgba(63,109,255,0.03));
+      border: 1px solid rgba(31,178,243,0.12);
+      display:flex; justify-content:space-between; align-items:center; gap:8px;
+      box-shadow: 0 16px 50px rgba(31,178,243,0.03);
+    }
+    .pulse {
+      display:inline-block; padding:8px 12px; border-radius:999px;
+      background: linear-gradient(90deg,var(--accent),var(--accent2)); color:#001; font-weight:800;
+      box-shadow: 0 12px 40px rgba(31,178,243,0.14); animation: floatPulse 2.2s infinite;
+    }
+    @keyframes floatPulse {
+      0% { transform:translateY(0); }
+      50% { transform:translateY(-4px) scale(1.02); }
+      100% { transform:translateY(0); }
+    }
+    .flash small { color:var(--muted); }
+
+    /* Catalog */
+    .catalog { max-width:1200px; margin:28px auto; padding:0 18px 80px; }
+    .section-title { font-family:'Orbitron', sans-serif; font-size:28px; margin-bottom:6px; }
+    .section-sub { color:var(--muted); margin-bottom:18px; font-size:13px; }
+
+    .product-card {
+      background: var(--card-gradient);
+      border:1px solid rgba(255,255,255,0.03);
+      border-radius:12px; padding:12px; transition: transform .16s ease, box-shadow .16s ease;
+    }
+    .product-card:hover { transform: translateY(-6px); box-shadow: 0 30px 70px rgba(5,8,15,0.6); }
+    .product-img { height:320px; overflow:hidden; border-radius:10px; background:#0b0b0f; display:flex; align-items:center; justify-content:center; }
+    .product-img img { width:100%; height:100%; object-fit:cover; display:block; }
+    .price { font-weight:800; font-size:1.05rem; color:var(--accent); }
+    .tag-coming { background:rgba(255,99,71,0.12); color:#ffbb99; padding:5px 8px; border-radius:999px; font-weight:700; font-size:12px; }
+
+    .actions { margin-top:10px; display:flex; gap:8px; flex-wrap:wrap; }
+    .btn-buy { background:linear-gradient(90deg,var(--accent),var(--accent2)); border:0; color:#001; padding:9px 14px; border-radius:10px; font-weight:700; }
+    .btn-disabled { background:transparent; border:1px solid rgba(255,255,255,0.04); color:var(--muted); padding:9px 14px; border-radius:10px; cursor:not-allowed; }
+
+    /* footer */
+    footer { padding:40px 18px; text-align:center; color:var(--muted); }
+
+    /* responsive */
+    @media (max-width:768px){
+      .brand-title{ font-size:14px; }
+      .product-img { height:220px; }
+      .search-bar { display:none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="brand">
+      <div class="logo">
+        <!-- Local logo (assets/logo.png). If missing, browser will show broken image — place logo.png inside assets/ as you already have -->
+        <img src="assets/logo.png" alt="QUANTRO logo" style="width:100%;height:100%;object-fit:contain;">
+      </div>
+      <div>
+        <div class="brand-title">QUANTRO Shop</div>
+        <div style="font-size:12px; color:var(--muted)">Feature of QUANTRO — Coming Soon</div>
+      </div>
+    </div>
+
+    <div class="search-bar">
+      <input id="searchInput" placeholder="Search clothes, tees, jackets..." />
+    </div>
+
+    <div class="nav-actions">
+      <a class="neon-btn" href="https://t.me/QNTROofficial" target="_blank">Telegram</a>
+      <a class="neon-btn" href="https://discord.gg/cnTrMxpXrt" target="_blank">Discord</a>
+    </div>
+  </header>
+
+  <!-- Flash banner -->
+  <div class="flash">
+    <div>
+      <strong style="margin-right:8px">Payment mode:</strong>
+      <span class="pulse">QUANTRO</span>
+      <small style="margin-left:10px; color:var(--muted)">will be available soon — this shop is a demo preview of upcoming functionality</small>
+    </div>
+    <div>
+      <small style="color:var(--muted)">Secure • Fast • Neon-powered</small>
+    </div>
+  </div>
+
+  <!-- Catalog -->
+  <main class="catalog">
+    <div class="d-flex justify-content-between align-items-end mb-2">
+      <div>
+        <div class="section-title">Featured Clothing</div>
+        <div class="section-sub">Demo catalog — buy flow & QUANTRO payments coming soon</div>
+      </div>
+      <div style="color:var(--muted); font-size:13px">Prices shown in <strong>USD</strong></div>
+    </div>
+
+    <div class="row g-4">
+      <!-- Neon Blue Jacket -->
+      <div class="col-sm-6 col-lg-4">
+        <div class="product-card">
+          <div class="product-img">
+            <img src="assets/Neon Blue Jacket.png" alt="Neon Blue Jacket">
+          </div>
+          <div style="padding-top:10px">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <div style="font-weight:700">Neon Blue Jacket</div>
+                <div style="font-size:13px; color:var(--muted)">Water-resistant • Unisex</div>
+              </div>
+              <span class="tag-coming">COMING SOON</span>
+            </div>
+            <div class="d-flex justify-content-between align-items-center" style="margin-top:10px">
+              <div class="price">$34.99</div>
+              <div style="font-size:13px; color:var(--muted)">Stock: 24</div>
+            </div>
+            <div class="actions">
+              <button class="btn-buy btn-disabled" onclick="comingSoon()">Buy Now</button>
+              <button class="neon-btn" onclick="notifyMe('Neon Blue Jacket')">Notify Me</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quantum Graphic Tee -->
+      <div class="col-sm-6 col-lg-4">
+        <div class="product-card">
+          <div class="product-img">
+            <img src="assets/Quantum Graphic Tee.png" alt="Quantum Graphic Tee">
+          </div>
+          <div style="padding-top:10px">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <div style="font-weight:700">Quantum Graphic Tee</div>
+                <div style="font-size:13px; color:var(--muted)">100% Cotton</div>
+              </div>
+              <span class="tag-coming">COMING SOON</span>
+            </div>
+            <div class="d-flex justify-content-between align-items-center" style="margin-top:10px">
+              <div class="price">$12.99</div>
+              <div style="font-size:13px; color:var(--muted)">Stock: 180</div>
+            </div>
+            <div class="actions">
+              <button class="btn-buy btn-disabled" onclick="comingSoon()">Buy Now</button>
+              <button class="neon-btn" onclick="notifyMe('Quantum Graphic Tee')">Notify Me</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Midnight Hoodie -->
+      <div class="col-sm-6 col-lg-4">
+        <div class="product-card">
+          <div class="product-img">
+            <img src="assets/Midnight Hoodie.png" alt="Midnight Hoodie">
+          </div>
+          <div style="padding-top:10px">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <div style="font-weight:700">Midnight Hoodie</div>
+                <div style="font-size:13px; color:var(--muted)">Soft Fleece</div>
+              </div>
+              <span class="tag-coming">COMING SOON</span>
+            </div>
+            <div class="d-flex justify-content-between align-items-center" style="margin-top:10px">
+              <div class="price">$19.99</div>
+              <div style="font-size:13px; color:var(--muted)">Stock: 90</div>
+            </div>
+            <div class="actions">
+              <button class="btn-buy btn-disabled" onclick="comingSoon()">Buy Now</button>
+              <button class="neon-btn" onclick="notifyMe('Midnight Hoodie')">Notify Me</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Classic Denim -->
+      <div class="col-sm-6 col-lg-4">
+        <div class="product-card">
+          <div class="product-img">
+            <img src="assets/Classic Denim.png" alt="Classic Denim">
+          </div>
+          <div style="padding-top:10px">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <div style="font-weight:700">Classic Denim</div>
+                <div style="font-size:13px; color:var(--muted)">Vintage Wash</div>
+              </div>
+              <span class="tag-coming">COMING SOON</span>
+            </div>
+            <div class="d-flex justify-content-between align-items-center" style="margin-top:10px">
+              <div class="price">$39.99</div>
+              <div style="font-size:13px; color:var(--muted)">Stock: 40</div>
+            </div>
+            <div class="actions">
+              <button class="btn-buy btn-disabled" onclick="comingSoon()">Buy Now</button>
+              <button class="neon-btn" onclick="notifyMe('Classic Denim')">Notify Me</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Solar Dress -->
+      <div class="col-sm-6 col-lg-4">
+        <div class="product-card">
+          <div class="product-img">
+            <img src="assets/Solar Dress.png" alt="Solar Dress">
+          </div>
+          <div style="padding-top:10px">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <div style="font-weight:700">Solar Dress</div>
+                <div style="font-size:13px; color:var(--muted)">Breezy & Light</div>
+              </div>
+              <span class="tag-coming">COMING SOON</span>
+            </div>
+            <div class="d-flex justify-content-between align-items-center" style="margin-top:10px">
+              <div class="price">$24.99</div>
+              <div style="font-size:13px; color:var(--muted)">Stock: 60</div>
+            </div>
+            <div class="actions">
+              <button class="btn-buy btn-disabled" onclick="comingSoon()">Buy Now</button>
+              <button class="neon-btn" onclick="notifyMe('Solar Dress')">Notify Me</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div> <!-- row -->
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div style="max-width:900px; margin:auto;">
+      <div style="font-weight:800; font-family:'Orbitron', sans-serif; font-size:18px">QUANTRO Shop — Demo</div>
+      <div style="color:var(--muted); margin-top:8px">Payment mode QUANTRO (QNTRO) will be available soon. This store is a preview of upcoming functionality.</div>
+      <div style="margin-top:12px; color:var(--muted)">© QUANTRO • All rights reserved</div>
+      <div style="margin-top:10px; font-size:13px"><a href="https://t.me/QNTROofficial" target="_blank" style="color:var(--muted); text-decoration:none">Telegram</a> · <a href="https://discord.gg/cnTrMxpXrt" target="_blank" style="color:var(--muted); text-decoration:none">Discord</a> · <a href="https://instagram.com/quantro.qntro" target="_blank" style="color:var(--muted); text-decoration:none">Instagram</a></div>
+    </div>
+  </footer>
+
+  <!-- External JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // Simple interactions
+    function comingSoon(){
+      alert("This feature is coming soon — payment with QUANTRO (QNTRO) will be enabled in a future update.");
+    }
+
+    function notifyMe(product){
+      const email = prompt("Enter your email to be notified when " + product + " is available:");
+      if(email){
+        // In production: send to your server or mailing list API
+        alert("Thanks — we will notify " + email + " when " + product + " is available.");
+      }
+    }
+
+    // Basic client-side search
+    document.getElementById('searchInput').addEventListener('input', function(e){
+      const q = e.target.value.toLowerCase();
+      document.querySelectorAll('.product-card').forEach(card => {
+        const title = card.querySelector('div[style*=\"font-weight:700\"]')?.innerText?.toLowerCase() || '';
+        const desc = card.querySelector('div[style*=\"color:var(--muted)\"]')?.innerText?.toLowerCase() || '';
+        card.style.display = (!q || title.includes(q) || desc.includes(q)) ? '' : 'none';
+      });
+    });
+  </script>
+</body>
+</html>
