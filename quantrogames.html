@@ -158,7 +158,7 @@
 
       <!-- Usecase dropdown (keeps same behavior as main site) -->
       <div style="position:relative;">
-        <a class="nav-btn" href="#" onclick="return false;" id="usecaseHeaderBtn">USECASE ▾</a>
+        <a class="nav-btn" href="#" id="usecaseHeaderBtn" aria-haspopup="true" aria-expanded="false">USECASE ▾</a>
         <div id="usecaseHeaderMenu" style="position:absolute; top:44px; right:0; display:none; background:rgba(16,32,51,0.94); border:1px solid rgba(31,178,243,0.12); padding:6px 0; border-radius:8px; min-width:180px;">
           <a href="quantro.html" style="display:block; padding:10px 14px; color:#fff; text-decoration:none; font-weight:700;">QUANTRO HOME</a>
           <a href="quantroshop.html" style="display:block; padding:10px 14px; color:#fff; text-decoration:none; font-weight:700;">QUANTRO SHOP</a>
@@ -331,28 +331,76 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
   <script>
-    AOS.init();
-
-    // header usecase menu behavior
-    const usecaseHeaderBtn = document.getElementById('usecaseHeaderBtn');
-    const usecaseHeaderMenu = document.getElementById('usecaseHeaderMenu');
-
-    usecaseHeaderBtn.addEventListener('click', function(e){
-      e.preventDefault();
-      usecaseHeaderMenu.style.display = usecaseHeaderMenu.style.display === 'block' ? 'none' : 'block';
-    });
-
-    document.addEventListener('click', function(evt){
-      if (!usecaseHeaderBtn.contains(evt.target) && (!usecaseHeaderMenu || !usecaseHeaderMenu.contains(evt.target))) {
-        if (usecaseHeaderMenu) usecaseHeaderMenu.style.display = 'none';
+    // Run after DOM is ready so handlers always attach (fixes Pages timing differences)
+    document.addEventListener('DOMContentLoaded', function () {
+      // Initialize AOS safely if available
+      if (typeof AOS !== 'undefined' && AOS && AOS.init) {
+        try { AOS.init(); } catch (e) { console.warn('AOS init failed', e); }
       }
-    });
 
-    // quick "play" disable message
-    document.querySelectorAll('.btn-play').forEach(btn => {
-      btn.addEventListener('click', function(){
-        alert('Game launching soon — follow QUANTRO for updates!');
-      });
+      // Header usecase menu behavior (robust)
+      const usecaseHeaderBtn = document.getElementById('usecaseHeaderBtn');
+      const usecaseHeaderMenu = document.getElementById('usecaseHeaderMenu');
+
+      if (usecaseHeaderBtn) {
+        // toggle function
+        const toggleMenu = (show) => {
+          if (!usecaseHeaderMenu) return;
+          if (typeof show === 'boolean') {
+            usecaseHeaderMenu.style.display = show ? 'block' : 'none';
+            usecaseHeaderBtn.setAttribute('aria-expanded', show ? 'true' : 'false');
+          } else {
+            const isShown = usecaseHeaderMenu.style.display === 'block';
+            usecaseHeaderMenu.style.display = isShown ? 'none' : 'block';
+            usecaseHeaderBtn.setAttribute('aria-expanded', !isShown ? 'true' : 'false');
+          }
+        };
+
+        usecaseHeaderBtn.addEventListener('click', function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          toggleMenu();
+        });
+
+        // close when clicking outside
+        document.addEventListener('click', function (evt) {
+          if (!usecaseHeaderMenu) return;
+          const target = evt.target;
+          const clickedInsideBtn = usecaseHeaderBtn.contains(target);
+          const clickedInsideMenu = usecaseHeaderMenu.contains(target);
+          if (!clickedInsideBtn && !clickedInsideMenu) {
+            usecaseHeaderMenu.style.display = 'none';
+            usecaseHeaderBtn.setAttribute('aria-expanded', 'false');
+          }
+        });
+
+        // close with Escape key
+        document.addEventListener('keydown', function (evt) {
+          if (evt.key === 'Escape' || evt.key === 'Esc') {
+            if (usecaseHeaderMenu) {
+              usecaseHeaderMenu.style.display = 'none';
+              usecaseHeaderBtn.setAttribute('aria-expanded', 'false');
+            }
+          }
+        });
+      }
+
+      // quick "play" disable message — attach handlers safely
+      try {
+        const playButtons = document.querySelectorAll('.btn-play');
+        playButtons.forEach(btn => {
+          // buttons are disabled but keep handler for safety
+          btn.addEventListener('click', function (ev) {
+            ev.preventDefault();
+            alert('Game launching soon — follow QUANTRO for updates!');
+          });
+        });
+      } catch (e) {
+        console.warn('Play button binding failed', e);
+      }
+
+      // If you need additional debug, uncomment:
+      // console.log('quantrogames: DOM ready, handlers attached', { usecaseHeaderBtn, usecaseHeaderMenu });
     });
   </script>
 </body>
